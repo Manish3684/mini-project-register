@@ -10,7 +10,8 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
-        <style>
+        <link rel="stylesheet" href="homestyle.css"/>
+       <%-- <style>
             body{
                 padding:0px;    
             }
@@ -68,28 +69,66 @@
             }
             .head .details{
                 width: 30%;
-                height: 300px;
+                height: 340px;
                 margin-left: 35%;
                 border: 1px solid black;
                 margin-top: 10%;
                
                 
             }
-        </style>
+            .photo{
+                margin-left: 90px;
+                margin-top: 10px;
+                height:200px;
+                width:50%;
+                border: 1px solid black;
+            }
+            .detail_inside{
+                
+                margin-top: 10px;
+                 height:110px;
+                width:100%;
+                border: 1px solid black;
+            }
+            #Name,#F_id,#dept{
+                width:80%;
+                height:20px;
+                margin-left:10%;
+                margin-top:10px;
+               border-bottom: 1px solid black;
+               text-align: center;
+            }
+            .mainlink{
+                text-decoration: none;
+                color: white;
+            }
+            .mainlink:hover{
+                color: grey;
+            }
+        </style>--%>
     </head>
     <body>
-         
+        <%@ page import="java.sql.*" %>
+        <%@ page import="java.io.IOException" %>
+        <%@ page import="java.io.PrintWriter" %>
+        <%@ page import="java.sql.DriverManager" %>
+        <%@ page import="javax.servlet.*" %>
+        <%@ page import="javax.servlet.ServletException" %>
+        <%@ page import="javax.servlet.http.HttpServlet" %>
+        <%@ page import="javax.servlet.http.HttpServletRequest" %>
+         <%@ page import="javax.servlet.http.HttpServletResponse" %>
+          <%@ page import="javax.servlet.http.HttpSession" %>
         <div class="header"></div>
         <div class="wrapper">
         <div class="Main">
             <div class="profile">
-                <a class="mainlink">Profile</a>
+                <a class="mainlink" href="Home.jsp">Profile</a>
             </div>
             <div class="topic">
                 <a class="mainlink">Topic</a>
             </div>
             <div class="Substitute-staff">
-                <a class="mainlink">Substitute staff</a>
+                <a class="mainlink" href="Profile.jsp" target="head">Substitute staff</a>
             </div>
             <div class="Absent-details">
                 <a class="mainlink">Absent Details</a>
@@ -113,10 +152,23 @@
             </div>
                 <div class="details">
                     <div class="photo">
-                        Photo
+                        photo
                     </div>
-                </div>
+                    <div>
+                        <div class="detail_inside">    
+                             <div id="Name">    
+                               ${Fname}
+                    </div>
+                              <div id="F_id">    
+                          ${FID}
+                    </div>
+                              <div id="dept">    
+                           ${FDept}
+                    </div>
+                    </div>
             </div>
          </div>
+            </div>
+        </div>     
     </body>
 </html>
