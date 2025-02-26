@@ -1,4 +1,7 @@
+
 <%@ page import="java.sql.*" %>
+<%@ page import="javax.servlet.http.HttpServletRequest.*"%>
+<%@ page import="javax.servlet.http.HttpServletResponse.*"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,7 +13,7 @@
             height:auto;
             border:1px solid black;
         }
-        .head .date, .head .time, .head .room, .head .course, .head .faculty {
+        .head .date, .head .time, .head .room, .head .course, .head .faculty,.head .year,.head .dept,.head .section{
             margin-left: 10%;
             margin-top: 2%;
             width:40%;
@@ -21,7 +24,7 @@
             display: flex;
             align-items: center;
         }
-        .search-box, .date-input, .time-input, .room-input, .course-input, .faculty-input {
+        .search-box, .date-input, .time-input, .room-input, .course-input, .faculty-input,.year-input,.dept-input,.section-input{
             width: 60%;
             font-size: 17px;
             margin-left: 10px;
@@ -58,6 +61,7 @@
                         }
     </style>
     <script>
+            
         function filterDropdown(inputId, dropdownId) {
             var input, filter, select, options, i;
             input = document.getElementById(inputId);
@@ -73,17 +77,43 @@
                 }
             }
         }
-
         function updateSearchBox(dropdownId, inputId) {
             var dropdown = document.getElementById(dropdownId);
             var input = document.getElementById(inputId);
             input.value = dropdown.options[dropdown.selectedIndex].text;
         }
+       function sendData() {
+            var selectedDept = document.getElementById("selected-dept").value;
+            var yearDropdown = document.getElementById("year-section");
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "fetchYear.jsp?selectedDept=" + encodeURIComponent(selectedDept), true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    yearDropdown.innerHTML = xhr.responseText;  // Overwrite instead of appending
+                }
+            };
+            xhr.send();
+        }
+         function fetchSections() {
+            var selectedYear = document.getElementById("year-section").value;
+            var sectionDropdown = document.getElementById("section-dropdown");
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "fetchSection.jsp?selectedYear=" + encodeURIComponent(selectedYear), true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    sectionDropdown.innerHTML = xhr.responseText;
+                }
+            };
+            xhr.send();
+        }
     </script>
 </head>
 <body>
     <div class="head">
-        <form name="Detail-form">
+        <form name="Detail-form" method="Post">
+
             <div class="date"><label>Date : </label><input class="date-input" type="date"/></div>
             <div class="time"><label>Time : </label><select class="time-input">
                 <option>8.45 - 9.45</option>
@@ -95,9 +125,29 @@
                 <option>3.15 - 4.15</option>
                 <option>4.15 - 5.15</option>                                
             </select></div>
+             <div class="dept">
+            <label class="dept-label">Dept:</label>
+            <select class="dept-input" id="selected-dept" onchange="sendData()">
+                <option value="">Select Department</option>
+                <option value="B-Tech">B-Tech</option>
+                <option value="BCA">BCA</option>
+                <option value="B.Sc CS">B.Sc CS</option>
+            </select>
+        </div>
+          <div class="year">
+            <label>Year:</label>
+            <select id="year-section" onchange="fetchSections()">
+                <option value="">-- Select Year --</option>
+            </select>
+        </div>
+
+        <div class="section">
+            <label>Section:</label>
+            <select id="section-dropdown">
+                <option value="">-- Select Section --</option>
+            </select>
+        </div>
             <div class="room"><label>Class Room No : </label><input class="room-input" type="text"/></div>
-            
-            <!-- Course Search and Dropdown -->
             <div class="course">
                 <label>Course ID and Name:</label>
                 <input type="text" id="courseSearch" class="search-box" onkeyup="filterDropdown('courseSearch', 'courseDropdown')" placeholder="Search Course...">
@@ -107,7 +157,7 @@
                         try {
                             Class.forName("oracle.jdbc.driver.OracleDriver");
               Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "system", "system"); 
-                            Statement stmt = con.createStatement();
+                           Statement stmt = con.createStatement();
                             ResultSet rs = stmt.executeQuery("SELECT course_id, course_name FROM courseDetail");
                             while (rs.next()) {
                     %>
@@ -123,8 +173,6 @@
                     %>
                 </select>
             </div>
-            
-            <!-- Faculty Search and Dropdown -->
             <div class="faculty">
                 <label>Faculty ID and Name:</label>
                 <input type="text" id="facultySearch" class="search-box" onkeyup="filterDropdown('facultySearch', 'facultyDropdown')" placeholder="Search Faculty...">
@@ -160,5 +208,10 @@
                 </div>
         </form>
     </div>
+                    <%
+                            String Dep=request.getParameter("selected-dept");
+                              HttpSession detail=request.getSession(true);
+                              detail.setAttribute("department",Dep);
+                            %>
 </body>
 </html>
