@@ -59,9 +59,28 @@
                                 flex-direction: column;
                                 margin-left: 20%;
                         }
+                        .msg-box {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #4CAF50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .error {
+            background: red;
+        }
+        .close-btn {
+            margin-left: 10px;
+            cursor: pointer;
+            font-weight: bold;
+        }
     </style>
-    <script>
-            
+    <script>            
         function filterDropdown(inputId, dropdownId) {
             var input, filter, select, options, i;
             input = document.getElementById(inputId);
@@ -90,14 +109,14 @@
             xhr.open("GET", "fetchYear.jsp?selectedDept=" + encodeURIComponent(selectedDept), true);
             xhr.onreadystatechange = function () {
                 if (xhr.readyState == 4 && xhr.status == 200) {
-                    yearDropdown.innerHTML = xhr.responseText;  // Overwrite instead of appending
+                    yearDropdown.innerHTML = xhr.responseText; 
                 }
             };
             xhr.send();
         }
          function fetchSections() {
             var selectedYear = document.getElementById("year-section").value;
-            var sectionDropdown = document.getElementById("section-dropdown");
+            var sectionDropdown = document.getElementById("section_dropdown");
 
             var xhr = new XMLHttpRequest();
             xhr.open("GET", "fetchSection.jsp?selectedYear=" + encodeURIComponent(selectedYear), true);
@@ -108,14 +127,30 @@
             };
             xhr.send();
         }
+        window.onload = function() {
+            var msgBox = document.getElementById("msgBox");
+            if (msgBox) {
+                msgBox.style.display = "block";
+                setTimeout(hideMsgBox, 3000); // Hide after 3 seconds
+            }
+        };
+
+        // Hide message box function
+        function hideMsgBox() {
+            var msgBox = document.getElementById("msgBox");
+            if (msgBox) {
+                msgBox.style.display = "none";
+            }
+        }
     </script>
 </head>
 <body>
     <div class="head">
-        <form name="Detail-form" method="Post">
-
-            <div class="date"><label>Date : </label><input class="date-input" type="date"/></div>
-            <div class="time"><label>Time : </label><select class="time-input">
+        <form name="Detail-form" method="Post" action="Storing_Data">
+            <!-- Date -->
+            <div class="date"><label>Date : </label><input class="date-input" type="date"  name="Date_select"/></div> 
+            <!-- Time -->
+            <div class="time"><label>Time : </label><select class="time-input"  name="Time_select">
                 <option>8.45 - 9.45</option>
                 <option>9.45 - 10.45</option>
                 <option>11.00 - 12.00</option>
@@ -125,33 +160,42 @@
                 <option>3.15 - 4.15</option>
                 <option>4.15 - 5.15</option>                                
             </select></div>
-             <div class="dept">
+            
+            <!--Department choose -->
+            <div class="dept">
             <label class="dept-label">Dept:</label>
-            <select class="dept-input" id="selected-dept" onchange="sendData()">
+           <select class="dept-input" id="selected-dept" name="Dept_select" onchange="sendData()">
                 <option value="">Select Department</option>
                 <option value="B-Tech">B-Tech</option>
                 <option value="BCA">BCA</option>
                 <option value="B.Sc CS">B.Sc CS</option>
             </select>
         </div>
+            
+            <!--Year Choose -->
           <div class="year">
             <label>Year:</label>
-            <select id="year-section" onchange="fetchSections()">
+          <select class="year-input" id="year-section" name="Year_select" onchange="fetchSections()">
                 <option value="">-- Select Year --</option>
             </select>
         </div>
 
+           <!--Section choose -->
         <div class="section">
             <label>Section:</label>
-            <select id="section-dropdown">
+           <select class="section-input" id="section_dropdown" name="sectionselect">
                 <option value="">-- Select Section --</option>
             </select>
         </div>
-            <div class="room"><label>Class Room No : </label><input class="room-input" type="text"/></div>
+           
+           <!--Class Room Number -->
+            <div class="room"><label>Class Room No : </label><input class="room-input" type="text" name="room_select"/></div>
+            
+            <!--Course ID and Course Name -->
             <div class="course">
                 <label>Course ID and Name:</label>
                 <input type="text" id="courseSearch" class="search-box" onkeyup="filterDropdown('courseSearch', 'courseDropdown')" placeholder="Search Course...">
-                <select id="courseDropdown" class="course-input" onchange="updateSearchBox('courseDropdown', 'courseSearch')">
+                <select id="courseDropdown" class="course-input" name="course_select" onchange="updateSearchBox('courseDropdown', 'courseSearch')">
                     <option value="">-- Select Course --</option>
                     <% 
                         try {
@@ -161,7 +205,7 @@
                             ResultSet rs = stmt.executeQuery("SELECT course_id, course_name FROM courseDetail");
                             while (rs.next()) {
                     %>
-                        <option value="<%= rs.getString("course_id") %>"><%= rs.getString("course_id") %> - <%= rs.getString("course_name") %></option>
+                        <option value="<%= rs.getString("course_id") + " - " + rs.getString("course_name") %>"> <%= rs.getString("course_id")%> - <%= rs.getString("course_name") %></option>
                     <% 
                             }
                             rs.close();
@@ -173,10 +217,12 @@
                     %>
                 </select>
             </div>
+                
+               <!--Faculty Id and Name choose-->
             <div class="faculty">
                 <label>Faculty ID and Name:</label>
                 <input type="text" id="facultySearch" class="search-box" onkeyup="filterDropdown('facultySearch', 'facultyDropdown')" placeholder="Search Faculty...">
-                <select id="facultyDropdown" class="faculty-input" onchange="updateSearchBox('facultyDropdown', 'facultySearch')">
+                <select id="facultyDropdown" class="faculty-input" name="faculty_select" onchange="updateSearchBox('facultyDropdown', 'facultySearch')">
                     <option value="">-- Select Faculty --</option>
                     <% 
                         try {
@@ -186,7 +232,10 @@
                             ResultSet rs = stmt.executeQuery("SELECT faculty_id, faculty_name FROM facultyDetail");
                             while (rs.next()) {
                     %>
-                        <option value="<%= rs.getString("faculty_id") %>"><%= rs.getString("faculty_id") %> - <%= rs.getString("faculty_name") %></option>
+                      <option value="<%= rs.getString("faculty_id") + " - " + rs.getString("faculty_name") %>">
+    <%= rs.getString("faculty_id") %> - <%= rs.getString("faculty_name") %>
+</option>
+
                     <% 
                             }
                             rs.close();
@@ -204,14 +253,9 @@
                                           </div>
                            <div class="body_submit">
                                         <input id="button_sub" type="submit" value="Reset" style="margin-left: 0%;"/>
-               </div>
+                       </div>
                 </div>
         </form>
-    </div>
-                    <%
-                            String Dep=request.getParameter("selected-dept");
-                              HttpSession detail=request.getSession(true);
-                              detail.setAttribute("department",Dep);
-                            %>
-</body>
+    </div>  
+   </body>
 </html>

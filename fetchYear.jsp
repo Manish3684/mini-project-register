@@ -28,4 +28,6 @@
             out.println("<option>Error: " + e.getMessage() + "</option>");
         }
     }
+     HttpSession detail=request.getSession(true);
+     detail.setAttribute("SelectedDepartment",selectedDept );       
 %>
