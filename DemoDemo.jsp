@@ -6,79 +6,9 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Teacher Staff Register</title>
-    <style>
-        .head{
-            width:100%;
-            height:auto;
-            border:1px solid black;
-        }
-        .head .date, .head .time, .head .room, .head .course, .head .faculty,.head .year,.head .dept,.head .section{
-            margin-left: 10%;
-            margin-top: 2%;
-            width:40%;
-            height:auto;
-            border:1px solid black;
-            padding: 1%;
-            font-family: "Times New Roman", Times, serif;
-            display: flex;
-            align-items: center;
-        }
-        .search-box, .date-input, .time-input, .room-input, .course-input, .faculty-input,.year-input,.dept-input,.section-input{
-            width: 60%;
-            font-size: 17px;
-            margin-left: 10px;
-            text-align: center;
-            font-family: "Times New Roman", Times, serif;
-        }
-        .btn{
-                width: 100%;
-                height: auto;
-                display:flex;
-                flex-direction: cloumn;
-        }
-        .body_submit {
-                                width: 15%;
-                                height: 60px;
-                                margin-left: 10%;
-                                display:flexl;
-                                flex-direction: cloumn;
-                        }
-                        #button_sub {
-                                cursor: pointer;
-                                border: none;
-                                background-color: #069ed1;
-                                border-radius: 15px;
-                                color: white;
-                                padding: 10px;
-                                font-size: 14px;
-                                font-weight: bold;
-                                margin-top: 10px;
-                                width: 100%;
-                                display:flex;
-                                flex-direction: column;
-                                margin-left: 20%;
-                        }
-                        .msg-box {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: #4CAF50;
-            color: white;
-            padding: 15px;
-            border-radius: 5px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-        .error {
-            background: red;
-        }
-        .close-btn {
-            margin-left: 10px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-    </style>
+    
+               <link rel="stylesheet" type="text/css" href="modelcss.css">
+
     <script>            
         function filterDropdown(inputId, dropdownId) {
             var input, filter, select, options, i;
@@ -144,11 +74,12 @@
     </script>
 </head>
 <body>
-    <div class="head">
+    <div class="head12">
         <form name="Detail-form" method="Post" action="Storing_Data"> 
             <!-- Time -->
             <div class="time"><label>Time : </label><select class="time-input"  name="Time_select">
-                <option>8.45 - 9.45</option>
+                            <option>--select Time -- </option>
+                 <option>8.45 - 9.45</option>
                 <option>9.45 - 10.45</option>
                 <option>11.00 - 12.00</option>
                 <option>12.00 - 1.00</option>

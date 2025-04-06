@@ -37,10 +37,7 @@
                                 <div class="Total-absents">
                                       <a class="mainlink" data-page="viewDetails.jsp">View Details </a>
                                 </div>
-                                <div class="add_faculty">
-                                      <a class="mainlink"data-page="modifyFacultyTable.jsp" >Edit Faculty</a>
-                                </div>
-                                <div class="password_class">
+                              <div class="password_class">
                                       <a class="mainlink" href="password_change.jsp">Change Password </a>
                                 </div>
                                 <div class="Logout">

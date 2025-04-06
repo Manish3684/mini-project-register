@@ -89,12 +89,9 @@
     </style>
 </head>
 <body>
-    <!-- Main Content -->
     <div id="mainContent">
         <button class="open-popup-btn" onclick="openPopup()">Open Popup</button>
     </div>
-
-    <!-- Popup -->
     <div class="popup-overlay" id="popupOverlay">
         <div class="popup-content">
             <button class="close-popup-btn" onclick="closePopup()">&times;</button>

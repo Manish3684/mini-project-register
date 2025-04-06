@@ -116,6 +116,7 @@
                         }
                 </style>
         </head>
+        
         <body>
                 <div class="logo">
                         <img src="logo.png" class="logo_cls"/>
@@ -154,7 +155,7 @@
                                 <div class="body_submit">
                                         <input id="button_sub" type="submit" value="Submit"/>
                                 </div>
-                                <a href="#" id="for_pin">Forget password?</a>
+                                <a href="password_change.jsp" id="for_pin">Forget password?</a>
                                 <div class="errordiv">
                                         <%= request.getAttribute("error") != null ? request.getAttribute("error") : ""%>
                                         <div class="error" id="captchaError"></div>                  
