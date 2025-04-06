@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
+import java.util.HashSet;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -28,7 +29,7 @@ public class Storing_Data extends HttpServlet {
                 Class.forName("oracle.jdbc.driver.OracleDriver");
                 Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "system", "system");
                 String query = "INSERT INTO facultyreplacment (ASSIGN_DATE, ASSIGN_TIME, YEAR, DEPARTMENT, SECTION, ROOMNO, COURSEID_NAME, FACULTYID_NAME) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
-                                PreparedStatement pst2 = con.prepareStatement(query);
+                 PreparedStatement pst2 = con.prepareStatement(query);
                 java.sql.Date sqlDate = java.sql.Date.valueOf(data_select);  
                 String sqlTime = time_select;  
 
@@ -42,10 +43,10 @@ public class Storing_Data extends HttpServlet {
                 pst2.setString(8, faculty_select);
                 pst2.executeUpdate();  
                 pst2.close();
-                con.close();
-                String msg="Successfully Assign Faculty ID and Name:"+ faculty_select+" For Department and Year:"+dept_select+"  "+year_select+" "+section_select;
-                session.setAttribute("msg", msg);
-                RequestDispatcher disp = request.getRequestDispatcher("Home.jsp");
+                con.close();     
+               // session.setAttribute("email", "manishsr18104@gmail.com");
+                JavaSendEmail.sendMail("225027083@sastra.ac.in");
+               RequestDispatcher disp = request.getRequestDispatcher("Home.jsp");
                 disp.forward(request, response);
             } catch (Exception e) {
                 e.printStackTrace();

@@ -29,7 +29,7 @@ public class LoginValidate extends HttpServlet {
             ArrayList<String> columnName=new ArrayList<String>();
               Class.forName("oracle.jdbc.driver.OracleDriver");
               Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "system", "system"); 
-              String query = "SELECT FacultyID,FacultyName,FacultyDept FROM Information WHERE FacultyID=? AND Facultypassword=?";
+              String query = "SELECT FacultyID,FacultyName,FacultyDept,CATAGORY FROM information WHERE FacultyID=? AND password=?";
                PreparedStatement pst = con.prepareStatement(query);
                 String uname=request.getParameter("F_ID");
                 String pword=request.getParameter("F_Pword");
@@ -39,34 +39,41 @@ public class LoginValidate extends HttpServlet {
                  HttpSession session=request.getSession(true);
                  
     if (rs.next()) {
-        RequestDispatcher disp = request.getRequestDispatcher("Home.jsp");
         ResultSetMetaData column=rs.getMetaData();
         String Fname=null;
         String FDept=null;
-        int FID=0;
+        String  FID=null;
+        String catagory=null;
         int i=0;
         while(i<column.getColumnCount()){
             i++;
             columnName.add(column.getColumnName(i));
         }
-            String[] detail=new String[3];
+            String[] detail=new String[4];
                    for(int i1=0;i1<columnName.size();i1++){
                        detail[i1]=rs.getString(columnName.get(i1));
                    }
-            FID=Integer.parseInt(detail[0]);
+            FID=detail[0];
             Fname=detail[1];
             FDept=detail[2];
+            catagory=detail[3];
             
             session.setAttribute("Fname", Fname);
             session.setAttribute("FID", FID);
             session.setAttribute("FDept", FDept);
-             disp.forward(request, response);
-        
+            if(catagory.equals("HOD")||catagory.equals("DEAN")){
+            RequestDispatcher disp = request.getRequestDispatcher("Home.jsp");
+            disp.forward(request, response);
+            }
+            else if(catagory.equals("Professor")||catagory.equals("AssisstancePerfessor")){
+                     RequestDispatcher disp = request.getRequestDispatcher("Home1.jsp");
+            disp.forward(request, response);
+            }
     }
 else
 {
         String strerror="Invalid username or password";
-       RequestDispatcher disp = request.getRequestDispatcher("Index.jsp");
+         RequestDispatcher disp = request.getRequestDispatcher("Index.jsp");
         request.setAttribute("error",strerror);
          disp.forward(request, response);
          
